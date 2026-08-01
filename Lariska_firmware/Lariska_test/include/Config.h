@@ -5,28 +5,43 @@
 
 #define VE_LPF_T 0.005
 
+// Servo Motor
 #define SERVO_KP 3.0
 #define SERVO_KI 20.0
-
-// Servo Motor
-#define MAX_VEL 3 // [ms]
+#define MAX_VEL 1200 // [ms]
 
 // Servo
-#define RUL_PIN    20//*!
-#define RUL_MAX    180
-#define RUL_MIX    0
-#define RUL_ZERO   0
+#define RUL_PIN    8//*!
+#define RUL_MAX    130
+#define RUL_MIN    48//37
+#define RUL_ZERO   83
 
-#define PITCH_PIN  21
-#define PITCH_MAX  180
-#define PITCH_MIX  0
-#define PITCH_ZERO 0
+#define RUL_MAX_IMP    1836
+#define RUL_MIN_IMP    1126//881
 
-#define YAW_PIN    22
-#define YAW_MAX    180
-#define YAW_MIX    0
-#define YAW_ZERO   0
+#define PITCH_PIN  9
+#define PITCH_MAX  83
+#define PITCH_MIN  32
+#define PITCH_ZERO 63
+
+#define PITCH_MAX_IMP    1368
+#define PITCH_MIN_IMP    835
+
+#define YAW_PIN    10
+#define YAW_MAX    110
+#define YAW_MIN    32
+#define YAW_ZERO   99//72
+
+#define YAW_MAX_IMP    1663
+#define YAW_MIN_IMP    835
 
 // Rat params
 #define RAT_WIDTH 0.09 // [m]
 #define RAT_WHEEL_RADIUS 0.09 // [m]
+
+// Rotate params
+#define GOAL_DIST 35 // [sm]
+#define ROTATE_KP 9.0//5.0
+
+// Squeak
+#define ALL_SQUEAK_TIME 3000

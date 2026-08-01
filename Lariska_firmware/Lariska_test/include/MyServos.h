@@ -1,30 +1,34 @@
 #pragma once
 #include <Arduino.h>
-#include "Servo.h"
+#include "ServoSmooth.h"
 #include "Config.h"
 
-Servo rul_servo, pitch_servo, yaw_servo;
+ServoSmooth rul, pitch, yaw;
 
-//== Rul control ==
-void rul_init()
+void servo_init()
 {
-    rul_servo.attach(RUL_PIN, RUL_MIX, RUL_MAX);
+    rul.attach(RUL_PIN, RUL_MIN_IMP, RUL_MAX_IMP, RUL_ZERO);    
+    rul.setSpeed(400/*160*/);
+    rul.setAccel(1.0/*0.6*/);
+  
+    pitch.attach(PITCH_PIN, PITCH_MIN_IMP, PITCH_MAX_IMP, PITCH_ZERO);
+    pitch.setSpeed(130);
+    pitch.setAccel(0.3);
+
+    yaw.attach(YAW_PIN, YAW_MIN_IMP, YAW_MAX_IMP, YAW_ZERO);
+    yaw.setSpeed(130);
+    yaw.setAccel(0.3);
 }
 
-void rul_tick(int phi)
+void servo_tick()
 {
-    rul_servo.write(phi);
+    rul.tickManual();
+    pitch.tickManual();
+    yaw.tickManual();
 }
 
-//== Head control ==
-void h_init()
-{
-    pitch_servo.attach(PITCH_PIN, PITCH_MIX, PITCH_MAX);
-    yaw_servo.attach(YAW_PIN, YAW_MIX, YAW_MAX);
-}
-
-void h_tick(int pitch_phi, int yaw_phi)
-{
-    pitch_servo.write(pitch_phi);
-    yaw_servo.write(yaw_phi);
-}
+/*
+rul 37 85 130
+p   32 63 83
+y   32 72 110
+*/

@@ -6,10 +6,11 @@
 
 #define ENC_DIR 1
 
-#define ENC_TICK_TO_RAD (500/2*M_PI)
+#define ENC_TICK_TO_RAD (374/360.0)
 
-float enc_phi = 0;
+float enc_phi = 0.0;
 volatile int enc_counter = 0;
+volatile int32_t enc_t = 0;
 
 void enc_interruupt() {
   if (digitalRead(3)) enc_counter += ENC_DIR;
@@ -27,7 +28,8 @@ void enc_tick()
     int c = enc_counter;
     enc_counter = 0;
     interrupts();
-    enc_phi += ENC_TICK_TO_RAD * c  ;
+    enc_phi += ENC_TICK_TO_RAD * c;
+    enc_t += c;
 }
 
 float enc_get_phi()

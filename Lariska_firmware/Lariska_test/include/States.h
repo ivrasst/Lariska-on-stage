@@ -11,9 +11,12 @@ float vel = 0.0;
 
 void st_tick()
 {
-    rul_tick(rul_phi);
+    // rul_tick(rul_phi);
+    rul.setTargetDeg(rul_phi);
     sm_tick(vel);
-    h_tick(pitch_phi, yaw_phi);
+    pitch.setTargetDeg(pitch_phi);
+    yaw.setTargetDeg(yaw_phi);
+    // h_tick(pitch_phi, yaw_phi);
 }
 
 void st_forw()
@@ -26,11 +29,18 @@ void st_forw()
 
 void st_rotate()
 {
-    pitch_phi = PITCH_ZERO;
-    yaw_phi = YAW_ZERO;
+    // pitch_phi = PITCH_ZERO;
+    // yaw_phi = YAW_ZERO;
     son_tick();
-    rul_phi = (GOAL_DIST - son_wall_get_dist()) * ROTATE_KP;
-    vel = MAX_VEL;
+    int dist = son_wall_get_dist();
+    int fd = son_forw_get_dist();
+    // Serial.print(dist);
+    if(dist == 0) dist = GOAL_DIST * 1.5;
+    if (fd <= 23 && fd != 0) dist = GOAL_DIST * 0.6;
+     rul_phi = RUL_ZERO + (GOAL_DIST - dist) * ROTATE_KP;
+    // Serial.print("  ");
+    // Serial.println(rul_phi);
+    vel = 8000;//MAX_VEL;
 }
 
 void st_stop_bow()

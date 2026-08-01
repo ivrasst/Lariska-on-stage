@@ -2,9 +2,9 @@
 
 #include <Arduino.h>
 
-#define M_INA_PIN 10 //*!
-#define M_INB_PIN 11
-#define M_PWM_PIN 12
+#define M_INA_PIN 5 //*!
+#define M_INB_PIN 4
+#define M_PWM_PIN 6
 
 void m_init()
 {
