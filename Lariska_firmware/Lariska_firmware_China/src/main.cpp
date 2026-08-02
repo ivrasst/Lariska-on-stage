@@ -32,31 +32,67 @@ void setup() {
   argviz_start();
   //-------------------
 
-
+  // Move to Cheburashka part
   son_tick(1);
-  while (son_forw_get_dist() > 23){
-    move_to_Cheburashka();
+  while (son_forw_get_dist() >= 23 && son_forw_get_dist() != 0)
+  {
+    static uint32_t timer = micros();
+    while (micros() - timer < Ts_us)
+    ;
+    timer = micros();
+
+    st_forw();
+    st_tick();
+    
+
     son_tick(1);
   }
-}
+  sm_off();
 
-void move_to_Cheburashka()
-{
-  static uint32_t timer = micros();
-  while (micros() - timer < Ts_us)
-  ;
-  timer = micros();
-
-  st_rotate();
-  st_tick();
+  // Bow part
+  yaw.setTargetDeg(YAW_MAX);
+  delay(200);
+  pitch.setTargetDeg(PITCH_MAX);
+  delay(200);
   
-  // servo_test();
-  servo_tick();
+  for(int i = 0; i < 3; i++){
+    buz_state(1);
+    delay(150);
+    buz_state(0);
+    delay(150);
+  }
+  
+  yaw.setTargetDeg(YAW_ZERO);
+  delay(200);
+  pitch.setTargetDeg(PITCH_ZERO);
+  delay(200);
+
+  // Rotate part
+  uint32_t time_rot = millis();
+  while (millis() - time_rot < 10000)
+  {
+    static uint32_t timer = micros();
+    while (micros() - timer < Ts_us)
+    ;
+    timer = micros();
+
+    st_rotate();
+    st_tick();
+    
+    son_tick(1);
+  }
+  sm_off();
+
+  
 }
+
+
 
 void loop() {
   // static uint32_t timer = micros();
   // while (micros() - timer < Ts_us)
   // ;
   // timer = micros();
+
+  // servo_test();
 }

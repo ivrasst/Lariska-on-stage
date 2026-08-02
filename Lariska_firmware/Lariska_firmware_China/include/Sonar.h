@@ -35,6 +35,30 @@ void son_tick()
     son_wall_dist = son_wall_d / 58;
 }
 
+
+/// @brief 
+/// @param choose_son=0 Wall  
+/// @param choose_son=1 Forw
+void son_tick(bool choose_son)
+{
+    if(choose_son)
+    {
+        digitalWrite(SONAR_FORW_TRIG, HIGH);
+        delayMicroseconds(10);
+        digitalWrite(SONAR_FORW_TRIG, LOW);
+        int16_t son_forw_d = pulseIn(SONAR_FORW_ECHO, HIGH, 11000);
+        son_forw_dist = son_forw_d / 58;
+    }
+    else if(!choose_son)
+    {
+        digitalWrite(SONAR_WALL_TRIG, HIGH);
+        delayMicroseconds(10);
+        digitalWrite(SONAR_WALL_TRIG, LOW);
+        int16_t son_wall_d = pulseIn(SONAR_WALL_ECHO, HIGH, 8000);
+        son_wall_dist = son_wall_d / 58;
+    }
+}
+
 int son_forw_get_dist()
 {
     return son_forw_dist;

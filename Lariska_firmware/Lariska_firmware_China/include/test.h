@@ -13,3 +13,42 @@ void servo_test()
     pitch.setTargetDeg(test_phi_pitch);
     yaw.setTargetDeg(test_phi_yaw);
 }
+
+void start_test()
+{
+    // Servo
+    rul.setTargetDeg(RUL_MIN);
+    delay(250);
+    rul.setTargetDeg(RUL_ZERO);
+    delay(250);
+    rul.setTargetDeg(RUL_MAX);
+    delay(250);
+    rul.setTargetDeg(RUL_ZERO);
+    delay(250);
+
+    yaw.setTargetDeg(YAW_MAX);
+    delay(250);
+    pitch.setTargetDeg(PITCH_MAX);
+    delay(250);
+    pitch.setTargetDeg(PITCH_ZERO);
+    delay(250);
+    yaw.setTargetDeg(YAW_ZERO);
+    delay(250);
+
+    // Motor
+    uint32_t t = millis();
+    while (millis() - t <= 500)
+    {
+        if(millis() - t <= 250)
+        {
+            sm_tick(MAX_VEL);
+        }
+        else if(millis() - t < 500)
+        {
+            sm_tick(-MAX_VEL);
+        }
+        else
+            sm_tick(0);
+    }
+    
+}
