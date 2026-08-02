@@ -14,6 +14,8 @@
 
 #include "Screens.h"
 
+void move_to_Cheburashka();
+
 void setup() {
   Serial.begin(115200);
   ve_init();
@@ -28,21 +30,33 @@ void setup() {
   argviz_registerScreen(1, servo);
   argviz_registerScreen(2, sonars);
   argviz_start();
-  
+  //-------------------
+
+
+  son_tick(1);
+  while (son_forw_get_dist() > 23){
+    move_to_Cheburashka();
+    son_tick(1);
+  }
 }
 
-void loop() {
+void move_to_Cheburashka()
+{
   static uint32_t timer = micros();
   while (micros() - timer < Ts_us)
   ;
   timer = micros();
-  
-  
-  
 
   st_rotate();
   st_tick();
   
   // servo_test();
   servo_tick();
+}
+
+void loop() {
+  // static uint32_t timer = micros();
+  // while (micros() - timer < Ts_us)
+  // ;
+  // timer = micros();
 }
