@@ -14,6 +14,11 @@ void servo_test()
     yaw.setTargetDeg(test_phi_yaw);
 }
 
+void sm_test()
+{
+    sm_tick(goal_w);
+}
+
 void start_test()
 {
     // Servo

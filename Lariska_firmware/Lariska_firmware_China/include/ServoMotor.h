@@ -28,3 +28,7 @@ void sm_tick(float w0)
     m_drive(u);
 }
 
+void sm_off()
+{
+    m_drive(0);
+}

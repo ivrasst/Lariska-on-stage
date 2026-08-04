@@ -11,12 +11,11 @@ float vel = 0.0;
 
 void st_tick()
 {
-    // rul_tick(rul_phi);
     rul.setTargetDeg(rul_phi);
     sm_tick(vel);
     pitch.setTargetDeg(pitch_phi);
     yaw.setTargetDeg(yaw_phi);
-    // h_tick(pitch_phi, yaw_phi);
+    servo_tick();
 }
 
 void st_forw()
@@ -24,23 +23,26 @@ void st_forw()
     pitch_phi = PITCH_ZERO;
     yaw_phi = YAW_ZERO;
     rul_phi = RUL_ZERO;
-    vel = MAX_VEL;
+    vel = 450;
 }
 
 void st_rotate()
 {
-    // pitch_phi = PITCH_ZERO;
-    // yaw_phi = YAW_ZERO;
-    son_tick();
+    son_tick(0);
     int dist = son_wall_get_dist();
     int fd = son_forw_get_dist();
-    // Serial.print(dist);
-    if(dist == 0) dist = GOAL_DIST * 1.5;
-    if (fd <= 23 && fd != 0) dist = GOAL_DIST * 0.6;
-     rul_phi = RUL_ZERO + (GOAL_DIST - dist) * ROTATE_KP;
-    // Serial.print("  ");
-    // Serial.println(rul_phi);
-    vel = 8000;//MAX_VEL;
+    
+    if(dist == 0)
+        dist = GOAL_DIST * 1.5;
+    if (fd <= 23 && fd != 0)
+        dist = GOAL_DIST * 0.6;
+
+    int err = (GOAL_DIST - dist);
+    static int errOld = err;
+
+    rul_phi = 100 + ( (err * ROTATE_KP)+((err - errOld)*ROTATE_KD) );
+    
+    vel = 2000;//MAX_VEL;
 }
 
 void st_stop_bow()
@@ -69,37 +71,5 @@ void st_stop_bow()
     rul_phi = RUL_ZERO;
     vel = 0.0;
 }
-// #define START_TURNING_SON_DIST 1 //[]
-// #define END_TURNING_TIME 10 // [ms]
-// #define TURNING_SERV_ANG 10 // [deg]
-/*
-int forw()
-{
-    int phi = RUL_ZERO;
-    float forw_dist_m = 0;
-    float rot_radius_m = 0;
-    int rot_n = 1.5;
-    float f_rad = 2*M_PI * (forw_dist_m / (2*M_PI*RAT_WHEEL_RADIUS));
-    float r_rad =  2*M_PI * ((2*M_PI*rot_radius_m)*rot_n / (2*M_PI*RAT_WHEEL_RADIUS));
-    
-    static float start_rot_phi = 0;
-    
-    if(( son_f_get_dist() > START_TURNING_SON_DIST ) && ( son_f_get_dist() != 0 ))
-    {
-        phi = RUL_ZERO;
-    }
-    else
-    {
-        static uint32_t time_turn = millis();
-        if(millis() - time_turn < END_TURNING_TIME)
-        {
-            phi = TURNING_SERV_ANG;
-        }
-        else
-        {
-            
-        }
-    }
 
-}
-*/
+

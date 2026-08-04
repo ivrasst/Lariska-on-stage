@@ -25,7 +25,7 @@ void son_tick()
     digitalWrite(SONAR_FORW_TRIG, HIGH);
     delayMicroseconds(10);
     digitalWrite(SONAR_FORW_TRIG, LOW);
-    int16_t son_forw_d = pulseIn(SONAR_FORW_ECHO, HIGH, 11000);
+    int16_t son_forw_d = pulseIn(SONAR_FORW_ECHO, HIGH, 5000);
     son_forw_dist = son_forw_d / 58;
 
     digitalWrite(SONAR_WALL_TRIG, HIGH);
@@ -46,7 +46,7 @@ void son_tick(bool choose_son)
         digitalWrite(SONAR_FORW_TRIG, HIGH);
         delayMicroseconds(10);
         digitalWrite(SONAR_FORW_TRIG, LOW);
-        int16_t son_forw_d = pulseIn(SONAR_FORW_ECHO, HIGH, 11000);
+        int16_t son_forw_d = pulseIn(SONAR_FORW_ECHO, HIGH, 5000);
         son_forw_dist = son_forw_d / 58;
     }
     else if(!choose_son)
@@ -54,7 +54,7 @@ void son_tick(bool choose_son)
         digitalWrite(SONAR_WALL_TRIG, HIGH);
         delayMicroseconds(10);
         digitalWrite(SONAR_WALL_TRIG, LOW);
-        int16_t son_wall_d = pulseIn(SONAR_WALL_ECHO, HIGH, 8000);
+        int16_t son_wall_d = pulseIn(SONAR_WALL_ECHO, HIGH, 5000);
         son_wall_dist = son_wall_d / 58;
     }
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include "Config.h"
-#define BUZ_PIN A1
+#define BUZ_PIN 14
 
 void buz_init()
 {
