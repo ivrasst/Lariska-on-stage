@@ -3,6 +3,7 @@
 #include "MyServos.h"
 #include "Config.h"
 #include "Sonar.h"
+#include <AceSorting.h>
 
 int pitch_phi = PITCH_ZERO;
 int yaw_phi = YAW_ZERO;
@@ -26,23 +27,59 @@ void st_forw()
     vel = 450;
 }
 
+
+
 void st_rotate()
 {
+    // const int len = 5;
+    // static int Dists[len] = {GOAL_DIST};
+    // int Dists_sort[len] = {};
+    // static int index = 0;
+    
+    static int distOld = GOAL_DIST;
     son_tick(0);
     int dist = son_wall_get_dist();
-    int fd = son_forw_get_dist();
+    static uint32_t rul_time = millis();
     
-    if(dist == 0)
-        dist = GOAL_DIST * 1.5;
-    if (fd <= 23 && fd != 0)
-        dist = GOAL_DIST * 0.6;
+    if(dist == 0){
+        if(distOld < GOAL_DIST && (millis() - rul_time < 250))
+            dist = GOAL_DIST * 0.5;
+        else{
+            dist = GOAL_DIST * 1.5;
+            rul_time = millis();
+        }
+    }
+
+    // if(dist != 0) Dists[index] = dist;
+    // index++;
+    // if(index >= len) index = 0;
+
+    // for(int i = 0; i < 10; i++)
+    //     Dists_sort[i] = Dists[i];
+
+    // ace_sorting::insertionSort(Dists_sort, len);
+    
+    // int med = Dists_sort[len/2+1];
+       
+
+
+    //// if(dist == 0){
+    ////     if(distOld > GOAL_DIST)
+    ////         dist = GOAL_DIST * 1.5;
+          
+    //// }
 
     int err = (GOAL_DIST - dist);
+    // int err = (GOAL_DIST - med);
     static int errOld = err;
 
-    rul_phi = 100 + ( (err * ROTATE_KP)+((err - errOld)*ROTATE_KD) );
+    rul_phi = RUL_ZERO + 8 + ( (err * ROTATE_KP)+((err - errOld)*ROTATE_KD) );
     
-    vel = 2000;//MAX_VEL;
+    vel = 1200;//MAX_VEL;
+    
+
+    distOld = dist;
+    // distOld = med;
 }
 
 void st_stop_bow()

@@ -63,9 +63,9 @@ void loop() {
   // st_rotate();
   // st_tick();
     
-    // son_tick(1);
+  // son_tick(0);
 
-  sm_test();
+  // sm_test();
   // servo_test();
 }
 
@@ -98,6 +98,7 @@ void scenario()
   }
   sm_off();
 //*/
+
   uint32_t time_turn = millis();
   while (millis() - time_turn <= 700)
   {
@@ -131,7 +132,7 @@ void scenario()
 
   // FORW
   time_turn = millis();
-  while (millis() - time_turn <= 1000)
+  while (millis() - time_turn <= 1600)
   {
     static uint32_t timer = micros();
     while (micros() - timer < Ts_us)
@@ -148,21 +149,21 @@ void scenario()
 
   // TURN R
 
-  time_turn = millis();
-  while (millis() - time_turn <= 300)/*430*/
-  {
-    static uint32_t timer = micros();
-    while (micros() - timer < Ts_us)
-    ;
-    timer = micros();
+  // time_turn = millis();
+  // while (millis() - time_turn <= 300)/*430*/
+  // {
+  //   static uint32_t timer = micros();
+  //   while (micros() - timer < Ts_us)
+  //   ;
+  //   timer = micros();
     
-    sm_tick(450);
-    rul.setTarget(RUL_MIN_IMP);
-    rul.tick();
+  //   sm_tick(450);
+  //   rul.setTarget(RUL_MIN_IMP);
+  //   rul.tick();
     
-    // st_tick();
-  }
-  sm_off();
+  //   // st_tick();
+  // }
+  // sm_off();
 
   
   /*//////////////////////////////////////////////

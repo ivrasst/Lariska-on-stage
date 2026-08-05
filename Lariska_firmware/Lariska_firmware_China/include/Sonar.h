@@ -54,7 +54,7 @@ void son_tick(bool choose_son)
         digitalWrite(SONAR_WALL_TRIG, HIGH);
         delayMicroseconds(10);
         digitalWrite(SONAR_WALL_TRIG, LOW);
-        int16_t son_wall_d = pulseIn(SONAR_WALL_ECHO, HIGH, 5000);
+        int16_t son_wall_d = pulseIn(SONAR_WALL_ECHO, HIGH, 5500);
         son_wall_dist = son_wall_d / 58;
     }
 }

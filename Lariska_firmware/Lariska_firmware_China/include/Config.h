@@ -42,7 +42,7 @@ float SERVO_KI = 20.0;
 #define RAT_WHEEL_RADIUS 0.09 // [m]
 
 // Rotate params
-#define GOAL_DIST 50 // [sm]
+#define GOAL_DIST 30 // [sm]
 #define ROTATE_KP 9.0//5.0
 #define ROTATE_KD 80.0//5.0
 
