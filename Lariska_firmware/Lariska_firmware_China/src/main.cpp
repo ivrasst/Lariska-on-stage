@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <argviz.h>
 
-// #include "VoltageSens.h"
 #include "VelEst.h"
 #include "Motor.h"
 #include "Encoder.h"
@@ -11,9 +10,10 @@
 #include "MyServos.h"
 #include "Buzzer.h"
 #include "States.h"
-
+#include "States2.h"
 #include "Screens.h"
-
+#include "Sharp.h"
+#include "St3.h"
 
 
 
@@ -27,17 +27,19 @@ void setup() {
   servo_init();
   son_init();
   buz_init();
-
-  // while (rul.getTargetDeg() < 80 || rul.getTargetDeg() > 86)
-  // {  
-  //   static uint32_t timer = micros();
-  //   while (micros() - timer < Ts_us)
-  //   ;
-  //   rul.setTargetDeg(83);
-  //   servo_tick();
+  stPD_init();
+  // son_tick(0);
+  // static int pred = son_wall_get_dist();
+  // while (pred == 0 || pred >= 25)
+  // {
+  //   son_tick(0);
+  //   pred = son_wall_get_dist();
   // }
-  
-  scenario();  
+
+  // while (analogRead(A3) < 300);
+
+
+  // scenario();  
 
   /*argviz_init(Serial);
   argviz_registerScreen(0, enc_buz_vel);
@@ -55,163 +57,37 @@ void loop() {
   while (micros() - timer < Ts_us)
   ;
   timer = micros();
-  // son_tick();
-  // Serial.print("son_forw_get_dist()  :  ");
+  st_pd();
+  // st2_rotate_PD();
+  // st2_rotate_lqr();
+  // Serial.println(String(analogRead(A3))+ '\t' + String(analogRead(A0)));
   
-  // Serial.println(son_forw_get_dist());
-  // Serial.println(a);
-  // st_rotate();
-  // st_tick();
-    
-  // son_tick(0);
-
-  // sm_test();
   // servo_test();
+  // Serial.println(String(sharpF_m()) + " "+ String(sharpF()) + '\t' + String(sharpC_m()) + " "+ String(sharpC()));
 }
 
 
 
-
-// ====    ====
-
 void scenario()
 {
-  // Move to Cheburashka part
-  son_tick(1);
-  static int dist = son_forw_get_dist();
-  while ((dist == 0) || (dist >= 40))
-  {
-    static uint32_t timer = micros();
-    while (micros() - timer < Ts_us)
-    ;
-    timer = micros();
-
-    rul.setTargetDeg(RUL_MIN);
-    rul.tick();
-    st_forw();
-    
-    st_tick();
-    
-
-    son_tick(1);
-    dist = son_forw_get_dist();
-  }
-  sm_off();
-//*/
-
-  uint32_t time_turn = millis();
-  while (millis() - time_turn <= 700)
-  {
-    rul.setTarget(RUL_MAX_IMP);
-    rul.tick();
-  }
-
-  // time_turn = millis();
-  // while (millis() - time_turn <= 700)
-  // {
-  //   rul.setTarget(RUL_MIN_IMP);
-  //   rul.tick();
-  // }
-
-  // TURN L
-  time_turn = millis();
-  while (millis() - time_turn <= 500)/*430*/
-  {
-    static uint32_t timer = micros();
-    while (micros() - timer < Ts_us)
-    ;
-    timer = micros();
-    // st_forw();
-    sm_tick(450);
-    rul.setTarget(RUL_MAX_IMP);
-    rul.tick();
-    
-    // st_tick();
-  }
-  sm_off();
-
-  // FORW
-  time_turn = millis();
-  while (millis() - time_turn <= 1600)
-  {
-    static uint32_t timer = micros();
-    while (micros() - timer < Ts_us)
-    ;
-    timer = micros();
+  st_to_cheburashka();
+  Serial.println("S");
+  st_R_turn(250);
+  delay(150);
+  // st_forward(250);
+  st_forward(300);
   
-    sm_tick(450);
-    rul.setTargetDeg(RUL_ZERO);
-    rul.tick();
-    
-    // st_tick();
-  }
-  sm_off();
+  st_forward(1000);
+  st_L_turn(450);
+  delay(150);
+  st_forward(700);
+  st_beep();
 
-  // TURN R
 
-  // time_turn = millis();
-  // while (millis() - time_turn <= 300)/*430*/
-  // {
-  //   static uint32_t timer = micros();
-  //   while (micros() - timer < Ts_us)
-  //   ;
-  //   timer = micros();
-    
-  //   sm_tick(450);
-  //   rul.setTarget(RUL_MIN_IMP);
-  //   rul.tick();
-    
-  //   // st_tick();
-  // }
-  // sm_off();
+  delay(1000);//*/
 
-  
-  /*//////////////////////////////////////////////
-  // Bow part
-  const int de = 700;
-  uint32_t time_bow = millis();
-  while (millis() - time_bow <= de)
-  {
-    yaw.setTarget(YAW_MAX_IMP);
-    yaw.tick();
-  }
-  
-  
-  time_bow = millis();
-  while (millis() - time_bow <= de)
-  {
-    pitch.setTarget(PITCH_MAX_IMP);
-    pitch.tick();
-  }
-  // delay(200);
-  
-  for(int i = 0; i < 3; i++){
-    buz_state(1);
-    delay(500);
-    buz_state(0);
-    delay(500);
-  }
-  
-  yaw.setTargetDeg(YAW_ZERO);
-  delay(200);
-  pitch.setTargetDeg(PITCH_ZERO);
-  delay(200);
-//*/
-
-  // Rotate part
-  uint32_t time_rot = millis();
-  while (millis() - time_rot < 11000)
-  {
-    static uint32_t timer = micros();
-    while (micros() - timer < Ts_us)
-    ;
-    timer = micros();
-
-    st_rotate();
-    st_tick();
-    
-    // son_tick(1);
-  }
-  sm_off();
-//*/
+  // st_L_turn(400);
+  // delay(150);
+  // st_forward(500);
+  st_rot();
 }

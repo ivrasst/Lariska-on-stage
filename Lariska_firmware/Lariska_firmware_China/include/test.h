@@ -9,7 +9,8 @@ int test_phi_yaw = YAW_ZERO;
 
 void servo_test()
 {
-    rul.setTargetDeg(test_phi_rul);
+    // rul.setTargetDeg(test_phi_rul);
+    Rul.write(test_phi_rul);
     pitch.setTargetDeg(test_phi_pitch);
     yaw.setTargetDeg(test_phi_yaw);
 }
