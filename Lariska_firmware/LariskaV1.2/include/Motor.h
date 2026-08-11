@@ -5,4 +5,5 @@
 void motor_init();
 void motor_update();
 void motor_set_rpm(uint16_t rpm);
+void motor_stop();
 uint16_t motor_get_rpm();

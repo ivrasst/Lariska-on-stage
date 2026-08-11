@@ -9,10 +9,10 @@
 #define M_PIN_INA 5
 #define M_PIN_INB 4
 #define M_PIN_PWM 6
-#define M_ENC_INT 2
-#define M_ENC_DIR 3
+#define M_ENC_INT 3
+#define M_ENC_DIR 12
 
-static PID pid(1.5, 1, 0, 0, 350);
+static PID pid(1, 0.5, 0, 0, 350);
 static void motor_interrupt();
 static void motor_pwm(int16_t pwm);
 
@@ -40,10 +40,7 @@ void motor_update() {
 
     float real = motor_get_rpm();
     float res = pid.compute(rpm_set, real);
-    Serial.print(real);
-    Serial.print(",");
-    Serial.println(res);
-
+    
 
     motor_pwm(res);
 
@@ -59,6 +56,12 @@ void motor_update() {
 
 void motor_set_rpm(uint16_t rpm) {
     rpm_set = rpm;
+}
+
+void motor_stop() {
+    rpm_set = 0;
+    pid.reset();
+    motor_pwm(0);
 }
 
 uint16_t motor_get_rpm() {
