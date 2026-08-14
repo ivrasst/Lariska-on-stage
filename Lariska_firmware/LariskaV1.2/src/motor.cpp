@@ -49,7 +49,7 @@ void motor_update() {
         rpm_last = 0;
         return;
     }
-
+    
     float rpm = (1000000 / enc_period) / M_TICKS * 60;
     rpm_last = rpm;
 }

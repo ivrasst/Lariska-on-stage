@@ -6,8 +6,8 @@
 #include "Buzzer.h"
 #include "Sonar.h"
 
-// PID pid(0.2, 0, 0, -128, 127);
-PID pid(1.0, 0, 0, -128, 127);
+PID pid(0.2, 0, 0, -128, 127);
+// PID pid(1.0, 0, 0, -128, 127);
 
 void bow()
 {
@@ -40,13 +40,19 @@ void bow()
   delay(500);
 }
 
-void rotate(uint32_t time_rotate = 30000)
+void rotate(uint32_t time_rotate)
 {
     uint32_t timer = millis();
     while(millis() - timer < time_rotate)
     {
+        uint32_t t = millis();
+        while (millis() - t < 10)
+        ;
+        
         motor_set_rpm(150);
         motor_update();
+
+        Serial.println(motor_get_rpm());
         dist_update();
 
         uint16_t dist = dist_get();
@@ -62,10 +68,11 @@ void rotate(uint32_t time_rotate = 30000)
             servo_set(-110);
             pid.reset();
         } else {
-            servo_set(pid.compute(350, dist)); 
+            // servo_set(pid.compute(350, dist)); 
+            servo_set(pid.compute(450, dist)); 
         }
     
-        delay(25);
+        // delay(25);
     }
     motor_stop();
 }
@@ -74,8 +81,10 @@ void whait_trigger()
 {
     dist_update();
     uint16_t dist = dist_get();
+    // Serial.println(dist);
     while (dist > 260 || dist == 0)
     {
+        // Serial.println(dist);
         servo_set_zero();
         delay(25);
         dist_update();
@@ -119,7 +128,8 @@ void to_cheburashka()
     }
     motor_stop();
     
-    servo_set(-125);
+    // servo_set(-125); /// EDITED
+    servo_set(-119);
     delay(servo_delay);
 
     turn_timer = millis();

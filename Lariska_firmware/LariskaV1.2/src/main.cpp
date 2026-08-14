@@ -5,7 +5,7 @@
 #include "PID.h"
 #include "Buzzer.h"
 #include "States.h"
-
+#include "ADCread.h"
 
 
 void setup() {
@@ -16,13 +16,15 @@ void setup() {
   servo_init();
   motor_set_rpm(150);
   buz_init();
+  adc_init();
 
   // whait_trigger();
 
   // to_cheburashka();
   // bow();
 
-  rotate();
+  // rotate(36000);
+
   
 }
 
