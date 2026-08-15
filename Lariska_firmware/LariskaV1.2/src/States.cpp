@@ -5,6 +5,8 @@
 #include "ServoDrive.h"
 #include "Buzzer.h"
 #include "Sonar.h"
+#include "IR.h"
+
 
 PID pid(0.2, 0, 0, -128, 127);
 // PID pid(1.0, 0, 0, -128, 127);
@@ -56,19 +58,17 @@ void rotate(uint32_t time_rotate)
         dist_update();
 
         uint16_t dist = dist_get();
-        // Serial.println(dist);
-    
-        // if (millis() > 22000) {
-        //     motor_stop();
-        //     for(;;); // TODO: Переделать
-        // }
-
         if (dist == 0) {
-            // servo_set(-75);
-            servo_set(-110);
-            pid.reset();
+            ir_update();
+            if(ir_get() > 600){
+                servo_set(110);
+                pid.reset();
+            }
+            else{
+                servo_set(-110);
+                pid.reset();
+            }
         } else {
-            // servo_set(pid.compute(350, dist)); 
             servo_set(pid.compute(450, dist)); 
         }
     
@@ -155,4 +155,20 @@ void to_cheburashka()
 //////////////////////////
     servo_set(0);
     delay(servo_delay);
+}
+
+void go_away()
+{
+    uint32_t timer = millis();
+    while(millis() - timer < 2200)
+    {
+        
+        uint32_t t = millis();
+        while (millis() - t < 10)
+        ;
+        servo_set_zero();
+        motor_set_rpm(100);
+        motor_update();
+    }
+    motor_stop();
 }

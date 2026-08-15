@@ -23,3 +23,33 @@ void buz_squeak()
         delay(500);
     }
 }
+
+
+void buz_fin_squeak()
+{
+    float k = 1.95;
+    buz_state(1);
+    delay(100*k);
+    buz_state(0);
+    delay(100*k);
+
+    for(int i = 0; i < 3; i++)
+    {
+        buz_state(1);
+        delay(50*k);
+        buz_state(0);
+        delay(50*k);
+    }
+    delay(50*k);
+
+    buz_state(1);
+    delay(100*k);
+    buz_state(0);
+    delay(50*k);
+
+    buz_state(1);
+    delay(150*k);
+    buz_state(0);
+    delay(50*k);
+
+}
